@@ -2,31 +2,47 @@
   "name": "solace-candidate-assignment",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
     "generate": "drizzle-kit generate",
     "migrate:up": "node ./src/db/migrate.js",
     "seed": "node --loader esbuild-register/loader -r esbuild-register ./src/db/seed/index.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.32.1",
-    "next": "^14.2.19",
+    "next": "15.5.2",
     "postgres": "^3.4.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.35.0",
     "@types/node": "^20.14.12",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "drizzle-kit": "^0.23.0",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "drizzle-kit": "^0.31.4",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "15.5.2",
     "postcss": "^8.4.40",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.5.4"
+  },
+  "overrides": {
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "ansi-regex": "^6.2.2",
+    "ansi-styles": "^4.3.0",
+    "color-name": "^2.0.0",
+    "is-arrayish": "^0.3.2",
+    "supports-color": "^7.2.0"
   }
 }
