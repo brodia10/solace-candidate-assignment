@@ -64,8 +64,25 @@ fix available via `npm audit fix`
 - Upgrade ESLint and install deps
   `npm install eslint@^9.0.0 @eslint/js @eslint/eslintrc -D`
   This brought vulns from 34 to 21.
-- Fix warning: next lint is depecrated and will be removed in Next.js 16
+- Fix warning: next lint is depecrated and will be removed in Next.js 16. Migrate from `next lint` to the ESLint CLI.
   `npx @next/codemod@canary next-lint-to-eslint-cli .`
+
+  Tried `npm audit fix --force`. Reduced vulnerabilities from 36 → 18 (good!)
+  But broke everything (bad!)
+
+- Install the secure package versions of packages with vulns - `npm install ansi-regex@latest ansi-styles@latest color-name@latest is-arrayish@latest supports-color@latest --save-dev`
+- Add overrides in `package.json` to force all packages to use the secure versions
+- Fix
+  `npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is`
+  `npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is``
+
+- Check if there's a newer version of drizzle-kit that uses the new tsx package:
+  `npm ls @esbuild-kit/esm-loader @esbuild-kit/core-utils`. There is.
+
+- Install latest stable release of `drizzle-kit`
+  `npm install drizzle-kit@latest -D`
+
+This fixed all 36 critical vulnerablilties!
 
 - Add scripts to `package.json` to run docker and apply lint fixing
 
