@@ -94,4 +94,7 @@ Improved performance (Turbopack)
 
 - Uncomment db url in .env
 - Uncomment line in src/app/api/advocates/route.ts
-- Create persistent docker volume for psql data by adding missing top-level psql value in `docker-compose`.yml
+- Create persistent docker volume for psql data by adding missing top-level psql value in `docker-compose`.yml - nevermind, that's totally fine. TIL
+- Upon trying to migrate the db, I see drizzle-orm is out of date. Update drizzle orm `npm update drizzle-orm`
+- Generate migrations with `npm run generate` instead of pushing schema directly to the database with `npx drizzle-kit push`
+- Update migrate.js to a .ts file for consistency, install `tsx` as dev dependency to run it.
