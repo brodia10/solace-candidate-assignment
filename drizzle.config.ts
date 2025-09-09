@@ -1,4 +1,9 @@
-const config = {
+import { config } from "dotenv";
+import path from "path";
+
+config({ path: path.resolve(process.cwd(), ".env.local") });
+
+const drizzleConfig = {
   dialect: "postgresql",
   schema: "./src/db/schema.ts",
   dbCredentials: {
@@ -8,4 +13,4 @@ const config = {
   strict: true,
 };
 
-export default config;
+export default drizzleConfig;
