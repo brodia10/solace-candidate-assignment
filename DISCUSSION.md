@@ -177,6 +177,8 @@ Home Page (View + API):
 
 - Filter for each property of advocate data
 - Sort for each property of advocate data
+- Redis Caching for performance optimization
+- Search suggestions
 - Geo based searching - Plot all of the cities on a cool mapleaf or plotly map and let the user search by city on the map
 - Clicking on Specialty cells takes you to an info page about that Specialty to let the user know what it is. ie: User clicks on Personality Disorders which takes you to a page (or a modal, some view) where there's basically a wiki of all of the Specialties and the user is taken to that specialty so like `/specialities/personality-disorders` which is also probably good for SEO?
 - Data visualizations - charts and graphs, the user could choose different views (if that would be valuable to the user)
