@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useAdvocates } from "../hooks/useAdvocates";
 import { useDebounce } from "../hooks/useDebounce";
 import { Advocate } from "../types/advocate";
@@ -41,36 +41,25 @@ export default function Home() {
     refetch,
     goToPage,
     setPageSize,
+    search,
+    searchTerm,
   } = useAdvocates();
-  const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const [localSearchTerm, setLocalSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(localSearchTerm, 300);
 
-  const filteredAdvocates = useMemo(() => {
-    if (!debouncedSearchTerm.trim()) {
-      return advocates;
+  // Update search when debounced term changes
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchTerm) {
+      search(debouncedSearchTerm);
     }
-
-    const term = debouncedSearchTerm.toLowerCase();
-    return advocates.filter((advocate: Advocate) => {
-      return (
-        advocate.firstName.toLowerCase().includes(term) ||
-        advocate.lastName.toLowerCase().includes(term) ||
-        advocate.city.toLowerCase().includes(term) ||
-        advocate.degree.toLowerCase().includes(term) ||
-        advocate.specialties.some((specialty) =>
-          specialty.toLowerCase().includes(term)
-        ) ||
-        advocate.yearsOfExperience.toString().includes(term)
-      );
-    });
-  }, [advocates, debouncedSearchTerm]);
+  }, [debouncedSearchTerm, searchTerm]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    setLocalSearchTerm(e.target.value);
   };
 
   const handleResetSearch = () => {
-    setSearchTerm("");
+    setLocalSearchTerm("");
   };
 
   if (loading) {
@@ -196,7 +185,7 @@ export default function Home() {
                   <Input
                     type="text"
                     className="pl-10"
-                    value={searchTerm}
+                    value={localSearchTerm}
                     onChange={handleSearchChange}
                     placeholder="Search by name, city, degree, or specialty..."
                     aria-label="Search advocates"
@@ -268,7 +257,7 @@ export default function Home() {
         )}
 
         {/* Results */}
-        {filteredAdvocates.length === 0 ? (
+        {advocates.length === 0 ? (
           <Card>
             <CardContent className="p-12 text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
@@ -299,7 +288,7 @@ export default function Home() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredAdvocates.map((advocate: Advocate) => (
+                  {advocates.map((advocate: Advocate) => (
                     <TableRow key={advocate.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
