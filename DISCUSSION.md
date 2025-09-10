@@ -98,3 +98,57 @@ Improved performance (Turbopack)
 - Upon trying to migrate the db, I see drizzle-orm is out of date. Update drizzle orm `npm update drizzle-orm`
 - Generate migrations with `npm run generate` instead of pushing schema directly to the database with `npx drizzle-kit push`
 - Update migrate.js to a .ts file for consistency, install `tsx` as dev dependency to run it.
+
+## Frontend Issues to Fix
+
+### Major Issues:
+
+- DOM manipulation in React - Line 22: `document.getElementById("search-term").innerHTML = searchTerm;` - This is a React antipattern
+- Missing error handling - No try-catch for the fetch request
+- Nested promise chains - Lines 11-16: Should use async/await or proper promise chaining
+- Missing TypeScript types - No type definitions for advocates or event handlers
+- Accessibility issues - Missing key props in map functions, no proper table structure
+- Search logic bug - Line 32: `advocate.yearsOfExperience.includes(searchTerm)` - trying to use includes on a number
+- Inconsistent data structure - The search expects `specialties` but the schema uses `payload`
+
+### Code Quality Issues:
+
+- Inline styles - Should use CSS classes or styled components
+- Console.log statements - Should be removed or use proper logging
+- Missing loading states - No loading indicator while fetching data
+- No empty state handling - What happens when no advocates match the search?
+
+### Performance Issues:
+
+- No debouncing - Search triggers on every keystroke
+- No memoization - Filtered results recalculated on every render
+
+4. Starting on the App
+   Notice a few things in `page.tsx`
+   Major Issues:
+1. DOM manipulation in React - Line 22: document.getElementById("search-term").innerHTML = searchTerm; - This is a React antipattern
+1. Missing error handling - No try-catch for the fetch request
+   Nested promise chains - Lines 11-16: Should use async/await or proper promise chaining
+   Missing TypeScript types - No type definitions for advocates or event handlers
+   Accessibility issues - Missing key props in map functions, no proper table structure
+   Search logic bug - Line 32: advocate.yearsOfExperience.includes(searchTerm) - trying to use includes on a number
+   Inconsistent data structure - The search expects specialties but the schema uses payload
+   Code Quality Issues:
+   Inline styles - Should use CSS classes or styled components
+   Console.log statements - Should be removed or use proper logging
+   Missing loading states - No loading indicator while fetching data
+   No empty state handling - What happens when no advocates match the search?
+   Performance Issues:
+   No debouncing - Search triggers on every keystroke
+   No memoization - Filtered results recalculated on every render
+
+What I would add if I had more time:
+
+Home Page (View + API):
+
+- Filter for each property of advocate data
+- Sort for each property of advocate data
+- Geo based searching - Plot all of the cities on a cool mapleaf or plotly map and let the user search by city on the map
+- Clicking on Specialty cells takes you to an info page about that Specialty to let the user know what it is. ie: User clicks on Personality Disorders which takes you to a page (or a modal, some view) where there's basically a wiki of all of the Specialties and the user is taken to that specialty so like `/specialities/personality-disorders` which is also probably good for SEO?
+- Data visualizations - charts and graphs, the user could choose different views (if that would be valuable to the user)
+- Save user searches to see what they're searching, could save user searches as categories and we could train our search
