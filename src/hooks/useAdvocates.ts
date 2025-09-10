@@ -13,6 +13,8 @@ interface UseAdvocatesReturn {
   refetch: () => void;
   goToPage: (page: number) => void;
   setPageSize: (size: number) => void;
+  search: (term: string) => void;
+  searchTerm: string;
 }
 
 export function useAdvocates(): UseAdvocatesReturn {
@@ -22,16 +24,24 @@ export function useAdvocates(): UseAdvocatesReturn {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSizeState] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchAdvocates = useCallback(
-    async (page: number = currentPage, limit: number = pageSize) => {
+    async (page: number, limit: number, search: string) => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
-          `/api/advocates?page=${page}&limit=${limit}`
-        );
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+        });
+
+        if (search.trim()) {
+          params.append("search", search.trim());
+        }
+
+        const response = await fetch(`/api/advocates?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -54,31 +64,49 @@ export function useAdvocates(): UseAdvocatesReturn {
         setLoading(false);
       }
     },
-    [currentPage, pageSize]
+    [] // No dependencies to avoid circular updates
   );
 
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-    fetchAdvocates(page, pageSize);
-  };
+  const goToPage = useCallback(
+    (page: number) => {
+      setCurrentPage(page);
+      fetchAdvocates(page, pageSize, searchTerm);
+    },
+    [fetchAdvocates, pageSize, searchTerm]
+  );
 
-  const setPageSize = (size: number) => {
-    setPageSizeState(size);
-    setCurrentPage(1);
-    fetchAdvocates(1, size);
-  };
+  const setPageSize = useCallback(
+    (size: number) => {
+      setPageSizeState(size);
+      setCurrentPage(1);
+      fetchAdvocates(1, size, searchTerm);
+    },
+    [fetchAdvocates, searchTerm]
+  );
 
+  const search = useCallback(
+    (term: string) => {
+      setSearchTerm(term);
+      setCurrentPage(1);
+      fetchAdvocates(1, pageSize, term);
+    },
+    [fetchAdvocates, pageSize]
+  );
+
+  // Initial load
   useEffect(() => {
-    fetchAdvocates();
-  }, [fetchAdvocates]);
+    fetchAdvocates(currentPage, pageSize, searchTerm);
+  }, []); // Only run once on mount
 
   return {
     advocates,
     pagination,
     loading,
     error,
-    refetch: () => fetchAdvocates(currentPage, pageSize),
+    refetch: () => fetchAdvocates(currentPage, pageSize, searchTerm),
     goToPage,
     setPageSize,
+    search,
+    searchTerm,
   };
 }
