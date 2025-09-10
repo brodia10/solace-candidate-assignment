@@ -118,6 +118,30 @@ Improved performance (Turbopack)
 - Missing loading states - No loading indicator while fetching data
 - No empty state handling - What happens when no advocates match the search?
 
+## Frontend Issues Fixed
+
+### Major Issues:
+
+- DOM manipulation removed - Now uses React state instead of document.getElementById
+- Error handling added - Comprehensive try-catch with proper error states
+- Promise chains fixed - Replaced with async/await in custom hook
+- TypeScript types added - Full type definitions for all data structures
+- Accessibility improved - Added key props, proper table structure, aria-labels
+- Search logic fixed - Proper handling of numbers and data structure consistency
+- Data structure aligned - Now correctly uses specialties array
+
+### Code Quality Issues:
+
+- Inline styles replaced - Beautiful CSS modules with proper styling
+- Console.logs removed - Clean, production-ready code
+- Loading states added - Proper loading indicators and error states
+- Empty state handling - Graceful handling when no data matches
+
+### Performance Issues:
+
+- Debouncing added - 300ms delay to prevent excessive API calls
+- Memoization added - useMemo for filtered results optimization
+
 ### Performance Issues:
 
 - No debouncing - Search triggers on every keystroke
@@ -141,6 +165,11 @@ Improved performance (Turbopack)
    Performance Issues:
    No debouncing - Search triggers on every keystroke
    No memoization - Filtered results recalculated on every render
+
+Design:
+
+- Use Tailwind
+- Use shadcn
 
 What I would add if I had more time:
 
